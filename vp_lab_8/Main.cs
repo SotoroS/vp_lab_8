@@ -82,7 +82,12 @@ namespace vp_lab_8
             }
         }
 
-        private void listBox_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Открытие окна детального просмотра новости при выборе элемента из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listBox_DoubleClick(object sender, EventArgs e)
         {
             (new NewsDescription(news[((ListBox)sender).SelectedIndex])).Show();
         }
