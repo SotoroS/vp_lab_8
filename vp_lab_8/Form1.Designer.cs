@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.textBoxDescription = new System.Windows.Forms.TextBox();
-            this.listView = new System.Windows.Forms.ListView();
+            this.listBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // textBoxDescription
@@ -39,35 +39,29 @@
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
-            this.textBoxDescription.Size = new System.Drawing.Size(1174, 41);
+            this.textBoxDescription.Size = new System.Drawing.Size(555, 41);
             this.textBoxDescription.TabIndex = 2;
             // 
-            // listView
+            // listBox
             // 
-            this.listView.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listView.AllowColumnReorder = true;
-            this.listView.FullRowSelect = true;
-            this.listView.HoverSelection = true;
-            this.listView.Location = new System.Drawing.Point(12, 55);
-            this.listView.Name = "listView";
-            this.listView.ShowItemToolTips = true;
-            this.listView.Size = new System.Drawing.Size(1174, 538);
-            this.listView.TabIndex = 1;
-            this.listView.UseCompatibleStateImageBehavior = false;
-            this.listView.View = System.Windows.Forms.View.Details;
+            this.listBox.FormattingEnabled = true;
+            this.listBox.Location = new System.Drawing.Point(12, 55);
+            this.listBox.Name = "listBox";
+            this.listBox.Size = new System.Drawing.Size(552, 290);
+            this.listBox.TabIndex = 3;
+            this.listBox.Click += new System.EventHandler(this.listBox_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1198, 605);
+            this.ClientSize = new System.Drawing.Size(576, 357);
+            this.Controls.Add(this.listBox);
             this.Controls.Add(this.textBoxDescription);
-            this.Controls.Add(this.listView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "Yandex.Новости: В мире";
-            this.Load += new System.EventHandler(this.Main_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -75,7 +69,7 @@
 
         #endregion
         private System.Windows.Forms.TextBox textBoxDescription;
-        private System.Windows.Forms.ListView listView;
+        private System.Windows.Forms.ListBox listBox;
     }
 }
 

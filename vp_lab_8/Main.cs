@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -13,6 +9,8 @@ namespace vp_lab_8
 {
     public partial class Main : Form
     {
+        List<News> news = new List<News>();
+
         public Main()
         {
             InitializeComponent();
@@ -33,42 +31,26 @@ namespace vp_lab_8
             Text = rootTag.Element(XName.Get("title")).Value + " " + rootTag.Element(XName.Get("lastBuildDate")).Value;
 
             // Формирование описания
-            textBoxDescription.Text = rootTag.Element(XName.Get("description")).Value;
-
-            // Добавляем название столбцов
-            listView.Items.Clear();
-            listView.Columns.Clear();
-
-            listView.Columns.Add("Заголовок");
-            listView.Columns.Add("Описание");
-            listView.Columns.Add("Дата публикации");
-            listView.Columns.Add("Ссылка");
+            textBoxDescription.Text = rootTag.Element(XName.Get("description")).Value.Trim();
 
             // Формируем таблицу новостей
-            foreach (XElement element in rootTag.Elements())
+            foreach (XElement el in rootTag.Elements())
             {
-                if (element.Name.ToString().ToLower() == "item")
+                if (el.Name.ToString().ToLower() == "item")
                 {
-                    // Заполнение таблицы
-                    XElement title = element.Element(XName.Get("title"));
-                    ListViewItem item = new ListViewItem(title.Value);
-
-                    XElement description = element.Element(XName.Get("description"));
-                    item.SubItems.Add(description.Value);
-
-                    XElement date = element.Element(XName.Get("pubDate"));
-                    item.SubItems.Add(date.Value);
-
-                    XElement link = element.Element(XName.Get("link"));
-                    item.SubItems.Add(link.Value);
-
-                    listView.Items.Add(item);
+                    // Добавляем новость в список
+                    news.Add(
+                        new News(el.Element(XName.Get("title")).Value,
+                            el.Element(XName.Get("description")).Value,
+                            el.Element(XName.Get("pubDate")).Value,
+                            el.Element(XName.Get("link")).Value
+                        ));
                 }
             }
 
-            // Изменение размеров колонок списка
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            var query = from n in news select n;
+
+            foreach (News n in query) listBox.Items.Add(n.title);
         }
 
         /// <summary>
@@ -100,54 +82,9 @@ namespace vp_lab_8
             }
         }
 
-        /// <summary>
-        /// Событие вызываемое при ЛКМ по узлу дерева
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        private void listBox_Click(object sender, EventArgs e)
         {
-            // Получаем объект связанный с узлом
-            object tag = e.Node.Tag;
-
-            // Проверяем на пренадлежность к классу XElement
-            if (tag is XElement)
-            {
-                // Приведение типа
-                XElement element = (XElement)tag;
-             
-                if (element.Name.ToString().ToLower() == "item")
-                {
-                    // Добавляем название столбцов
-                    listView.Items.Clear();
-                    listView.Columns.Clear();
-
-                    listView.Columns.Add("Заголовок");
-                    listView.Columns.Add("Описание");
-                    listView.Columns.Add("Дата публикации");
-                    listView.Columns.Add("Ссылка");
-
-                    // Заполнение таблицы
-                    XElement title = element.Element(XName.Get("title"));
-                    ListViewItem item = new ListViewItem(title.Value);
-
-                    XElement description = element.Element(XName.Get("description"));
-                    item.SubItems.Add(description.Value);
-
-                    XElement date = element.Element(XName.Get("pubDate"));
-                    item.SubItems.Add(date.Value);
-
-                    XElement link = element.Element(XName.Get("link"));
-                    item.SubItems.Add(link.Value);
-
-                    listView.Items.Add(item);
-                }
-            }
-        }
-
-        private void Main_Load(object sender, EventArgs e)
-        {
-
+            (new NewsDescription(news[((ListBox)sender).SelectedIndex])).Show();
         }
     }
 }
